@@ -8,7 +8,7 @@
 		      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"/>
 		<link rel="stylesheet" type="text/css"
 		      href="<%= request.getContextPath()%>/vendor/foundation-6.5.1/css/foundation.min.css"/>
-		<link rel="stylesheet" href="<%= request.getContextPath()%>/css/style.css" type="text/css"/>
+		<link rel="stylesheet" href="<%= request.getContextPath()%>/css/login.css" type="text/css"/>
 	</head>
 	<body>
 		<div class="callout large primary">

@@ -10,7 +10,7 @@ public class LoginBean implements Serializable {
 	
 	private static final String FORM_FIELD_LOGIN = "form-login";
 	private static final String FORM_FIELD_PWD = "form-pwd";
-	private static final String ATT_AUTH_SESSION = "isConnected";
+	public static final String ATT_AUTH_SESSION = "isConnected";
 
 	private String login;
 	private String pwd;
