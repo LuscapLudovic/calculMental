@@ -44,7 +44,7 @@
    ####LoginBean:
         login String,
         password String,
-        isAuth boolean
+        authResult String
 
    ####CalculBean:
         calcul ArrayList<String>,
