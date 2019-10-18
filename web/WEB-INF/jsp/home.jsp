@@ -1,11 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: llu
-  Date: 16/10/2019
-  Time: 21:33
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html class="no-js" lang="fr">
   <head>
     <title>$Title$</title>

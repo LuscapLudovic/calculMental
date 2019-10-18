@@ -27,7 +27,7 @@ public class LoginBean implements Serializable {
 		//TODO Authentification compte
 		if ( "sega".equals( login ) && "123".equals( pwd )) {
 			//TODO récupération et incrémentation du nombre de connexions
-			session.setAttribute( ATT_AUTH_SESSION, new User() );
+			session.setAttribute( ATT_AUTH_SESSION, new User(1, "testL", "testP", "testU", 1) );
 			authResult = "Authentification réussie : Bienvenue "+ login;
 		} else {
 			session.setAttribute( ATT_AUTH_SESSION, null);

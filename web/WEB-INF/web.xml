@@ -33,7 +33,7 @@
         <jsp-property-group>
             <url-pattern>*.jsp</url-pattern>
             <page-encoding>UTF-8</page-encoding>
-            <include-prelude>/WEB-INF/jsp/calcul.jsp</include-prelude>
+            <include-prelude>/WEB-INF/jsp/tags_lib.jsp</include-prelude>
         </jsp-property-group>
     </jsp-config>
 
