@@ -10,16 +10,23 @@ public class Expression {
 
     private static final  Pattern PATTERN = Pattern.compile("((\\-[0-9]|[0-9])+) ([/+*\\-]) ([0-9]+)\\w+");
 
-    private ArrayList<Integer> numbers;
-    private ArrayList<Operator> operators;
+    private ArrayList<Double> numbers = new ArrayList<>();
+    private ArrayList<Operator> operators = new ArrayList<>();
     private String calcul;
-    private String result;
+    private int result;
 
     private Expression(){};
 
-    public ArrayList<Integer> getNumbers() { return numbers; }
+    public Expression(ArrayList<Double> numbers, ArrayList<Operator> operators, String calcul, int result) {
+        this.numbers.addAll(numbers);
+        this.operators.addAll(operators);
+        this.calcul = calcul;
+        this.result = result;
+    }
 
-    public void setNumbers(ArrayList<Integer> numbers) { this.numbers = numbers; }
+    public ArrayList<Double> getNumbers() { return numbers; }
+
+    public void setNumbers(ArrayList<Double> numbers) { this.numbers = numbers; }
 
     public ArrayList<Operator> getOperators() { return operators; }
 
@@ -33,35 +40,40 @@ public class Expression {
         this.calcul = calcul;
     }
 
-    public String getResult() {
+    public int getResult() {
         return result;
     }
 
-    public void setResult(String result) {
+    public void setResult(int result) {
         this.result = result;
     }
+
+
 
     private static int getRandomNumber(int Min, int Max){
         return Min + (int)(Math.random() * ((Max - Min) + 1));
     }
 
-    public static ArrayList<Expression> generateCalcul(int nb_calcule) {
+
+    public static ArrayList<Expression> generateCalcul(int nb_calcule) throws CloneNotSupportedException {
         ArrayList<Expression> expressions = new ArrayList<>();
 
         Expression exp = new Expression();
 
         int nb_Operator = getRandomNumber(1, 3);
 
-        exp.numbers.add(nb_Operator);
-        StringBuilder expression = new StringBuilder(getRandomNumber(0, 99) + " ");
+        int nb = getRandomNumber(0, 10);
+
+        exp.numbers.add((double)nb);
+        StringBuilder expression = new StringBuilder().append(nb).append(" ");
 
         for (int i = 0; i <= nb_Operator; i++){
             Operator op = Operator.values()[getRandomNumber(0, Operator.values().length -1)];
             exp.operators.add(op);
             expression.append(op.toString()).append(" ");
 
-            int nb = getRandomNumber(0, 99);
-            exp.numbers.add(nb);
+            nb = getRandomNumber(0, 10);
+            exp.numbers.add((double)nb);
             expression.append(nb).append(" ");
         }
 
@@ -69,76 +81,74 @@ public class Expression {
             expressions = generateCalcul(nb_calcule - 1);
         }
         exp.calcul = expression.toString();
-        exp.result = Expression.calcAll(expression.toString());
+        exp.result = exp.calcAll();
         expressions.add(exp);
 
         return expressions;
     }
 
-    public static ArrayList<String> getAllCalc(String exp){
+    private int getPriorCalc(){
 
-        ArrayList<String> calcs = new ArrayList<>();
+        int priorCalc = -1;
 
-        Matcher m = PATTERN.matcher(exp);
-
-        boolean b = m.find();
-
-        System.out.println("///////////////////////////////////////////////////////////////////////////");
-        System.out.println(exp);
-        System.out.println(m.toString());
-
-        if(b) {
-            calcs.add(m.group(0));
-        }
-
-        return calcs;
-    }
-
-    public static String getPriorCalc(ArrayList<String> listCalc){
-
-        String priorCalc = "";
-
-        for (String tmpCalc: listCalc) {
-            if (tmpCalc.contains(Operator.MULTI.toString()) || tmpCalc.contains(Operator.DIVI.toString())){
-                priorCalc = tmpCalc;
+        for (int i = 0; i < operators.size(); i++){
+            if (operators.get(i) == Operator.MULTI || operators.get(i) == Operator.DIVI){
+                priorCalc = i;
+                break;
             }
         }
 
-        if (priorCalc.equals("")){
-            priorCalc = listCalc.get(0);
+        if (priorCalc == -1){
+            priorCalc = 0;
         }
 
-        System.out.println(priorCalc);
         return priorCalc;
     }
 
-    public static String calc(String fullCalc, String calc){
+    private void calc(int prior) throws ArithmeticException {
 
-        Operator op = Operator.toOpe(calc);
+        double result = Operator.calcOpe(operators.get(prior), numbers.get(prior), numbers.get(prior + 1));
 
-        String ope = String.valueOf(Operator.calcOpe(op, 1, 2));
+        operators.remove(prior);
 
-        fullCalc = fullCalc.replace(calc, ope);
+        numbers.set(prior, result);
+        numbers.remove(prior + 1);
 
-        return fullCalc;
     }
 
-    public static String calcAll(String fullCalc){
+    private int calcAll() throws CloneNotSupportedException {
 
         boolean valid = false;
 
-        do {
+        Expression cpyExp = this.clone();
 
-            if (PATTERN.matcher(fullCalc).find()){
-                ArrayList<String> calcs = Expression.getAllCalc(fullCalc);
-                String priorCalc = Expression.getPriorCalc(calcs);
-                fullCalc = Expression.calc(fullCalc, priorCalc);
-            }else{
-                valid = true;
-            }
+            do {
+                try{
+                    if (cpyExp.operators.size() != 0){
+                        int prior = cpyExp.getPriorCalc();
+                        cpyExp.calc(prior);
+                    }else{
+                        valid = true;
+                    }
 
-        }while(!valid);
+                }catch (ArithmeticException e){
+                    Expression tempExp = Expression.generateCalcul(1).get(0);
+                    this.numbers = tempExp.numbers;
+                    this.result = tempExp.result;
+                    this.calcul = tempExp.calcul;
+                    this.operators = tempExp.operators;
+                    System.out.println("Error calcul");
+                    cpyExp = this.clone();
+                }
 
-        return fullCalc.trim();
+            }while(!valid);
+
+        return cpyExp.numbers.get(0).intValue();
+    }
+
+
+    @Override
+    protected Expression clone() throws CloneNotSupportedException {
+        return new Expression(this.numbers, this.operators, this.calcul, this.result);
     }
 }

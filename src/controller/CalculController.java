@@ -32,7 +32,11 @@ public class CalculController  extends HttpServlet {
         List<Expression> dataSessionCalculs = null;//( List<Expression> ) session.getAttribute( "expressions" );
 
         if ( null == dataSessionCalculs ) {
-            dataSessionCalculs =  Expression.generateCalcul(5);
+            try {
+                dataSessionCalculs =  Expression.generateCalcul(10);
+            } catch (CloneNotSupportedException e) {
+                e.printStackTrace();
+            }
             session.setAttribute( "expressions", dataSessionCalculs );
         }
 
@@ -42,6 +46,7 @@ public class CalculController  extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+        System.out.println(req.getParameter("calcul"));
         //TODO Si le formulaire est correct
         if (true){
             //TODO Afficher le resultat et le classement
