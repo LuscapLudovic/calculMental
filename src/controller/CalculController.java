@@ -32,7 +32,11 @@ public class CalculController  extends HttpServlet {
         List<Expression> dataSessionCalculs = null;//( List<Expression> ) session.getAttribute( "expressions" );
 
         if ( null == dataSessionCalculs ) {
-            dataSessionCalculs =  Expression.generateCalcul(5);
+            try {
+                dataSessionCalculs =  Expression.generateCalcul(10);
+            } catch (CloneNotSupportedException e) {
+                e.printStackTrace();
+            }
             session.setAttribute( "expressions", dataSessionCalculs );
         }
 
@@ -42,14 +46,26 @@ public class CalculController  extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        //TODO Si le formulaire est correct
-        if (true){
+        HttpSession session = req.getSession( true );
+        System.out.println(req.getParameter("calcul_0"));
+
+        if (req.getParameter("calcul_0") != null){
+
+            int result = 0;
+
+            ArrayList<Expression> listExp = (ArrayList<Expression>) session.getAttribute("expressions");
+
+            for (int i = 0; i < listExp.size(); i++ ){
+                System.out.println(listExp.get(i).getResult() +  " == " + Integer.parseInt(req.getParameter("calcul_" + i)));
+                result += (listExp.get(i).getResult() == Integer.parseInt(req.getParameter("calcul_" + i))) ? 1 : 0;
+            }
+
             //TODO Afficher le resultat et le classement
+            session.setAttribute( "resultCalcul", result );
 
             req.getRequestDispatcher( PAGE_RESULT_JSP ).forward( req, resp );
         }else{
             doGet(req, resp);
-            //TODO Reafficher le formulaire avec les erreurs
         }
     }
 }

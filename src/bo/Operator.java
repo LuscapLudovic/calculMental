@@ -32,9 +32,9 @@ public enum Operator {
 
     }
 
-    public static int calcOpe(Operator ope, int nb1, int nb2){
+    public static double calcOpe(Operator ope, double nb1, double nb2){
 
-        int result = 0;
+        double result = 0;
 
         switch (ope){
             case ADDI:
@@ -47,6 +47,8 @@ public enum Operator {
                 result = nb1 * nb2;
                 break;
             case DIVI:
+                if (nb2 == 0)
+                    throw new ArithmeticException();
                 result = nb1 / nb2;
                 break;
         }
