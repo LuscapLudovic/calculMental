@@ -10,7 +10,7 @@
         <c:forEach var="expression" items="${sessionScope.expressions}" varStatus="status">
             <div>
                 <h2>${expression.calcul}</h2>
-                <input name="calcul" type="number">
+                <input name="calcul_${status.index}" type="number">
             </div>
         </c:forEach>
         <input type="submit" value="Valider">
