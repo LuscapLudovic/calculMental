@@ -10,6 +10,7 @@ public class User {
     private int best_score;
     //endregion
 
+    //region Constructors
     public User(){ }
 
     public User(int id, String login, String password, String username, int best_score) {
@@ -19,7 +20,9 @@ public class User {
         this.username = username;
         this.best_score = best_score;
     }
+    //endregion
 
+    //region Getter and Setter
     public int getId() {
         return id;
     }
@@ -59,4 +62,5 @@ public class User {
     public void setBest_score(int best_score) {
         this.best_score = best_score;
     }
+    //endregion
 }
